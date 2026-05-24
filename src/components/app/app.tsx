@@ -6,6 +6,7 @@ import { checkUserAuth } from '../../services/slices/userSlice';
 import { AppHeader } from '@components';
 import { IngredientDetails, Modal, OrderInfo } from '@components';
 import { ProtectedRoute } from '../protected-route/protected-route';
+import { ModalOrderInfo } from '../modal-order-info/modal-order-info';
 import {
   ConstructorPage,
   Feed,
@@ -30,7 +31,7 @@ const App = () => {
     dispatch(checkUserAuth());
   }, []);
 
-  const handleModalClose = (): void => {
+  const handleModalClose = () => {
     navigate(-1);
   };
 
@@ -115,21 +116,12 @@ const App = () => {
               </Modal>
             }
           />
-          <Route
-            path='/feed/:number'
-            element={
-              <Modal title='Детали заказа' onClose={handleModalClose}>
-                <OrderInfo />
-              </Modal>
-            }
-          />
+          <Route path='/feed/:number' element={<ModalOrderInfo />} />
           <Route
             path='/profile/orders/:number'
             element={
               <ProtectedRoute>
-                <Modal title='Детали заказа' onClose={handleModalClose}>
-                  <OrderInfo />
-                </Modal>
+                <ModalOrderInfo />
               </ProtectedRoute>
             }
           />

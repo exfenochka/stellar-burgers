@@ -5,11 +5,13 @@ import { TOrder } from '../../utils/types';
 type TOrderState = {
   orderRequest: boolean;
   orderModalData: TOrder | null;
+  orderData: TOrder | null;
 };
 
 const initialState: TOrderState = {
   orderRequest: false,
-  orderModalData: null
+  orderModalData: null,
+  orderData: null
 };
 
 export const createOrder = createAsyncThunk(
@@ -43,6 +45,7 @@ const orderSlice = createSlice({
       })
       .addCase(createOrder.fulfilled, (state, action) => {
         state.orderRequest = false;
+        state.orderData = action.payload;
         state.orderModalData = action.payload;
       })
       .addCase(createOrder.rejected, (state) => {
@@ -62,3 +65,6 @@ export const selectOrderRequest = (state: { order: TOrderState }) =>
 
 export const selectOrderModalData = (state: { order: TOrderState }) =>
   state.order.orderModalData;
+
+export const selectOrderData = (state: { order: TOrderState }) =>
+  state.order.orderData;

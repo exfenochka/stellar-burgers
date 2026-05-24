@@ -1,9 +1,7 @@
 import { setCookie, getCookie } from './cookie';
 import { TIngredient, TOrder, TOrdersData, TUser } from './types';
 
-//const URL = process.env.BURGER_API_URL; почему-то не работает dotenv-webpack
-const URL = 'https://norma.education-services.ru/api';
-//console.log(URL);
+const URL = process.env.BURGER_API_URL;
 
 const checkResponse = <T>(res: Response): Promise<T> =>
   res.ok ? res.json() : res.json().then((err) => Promise.reject(err));

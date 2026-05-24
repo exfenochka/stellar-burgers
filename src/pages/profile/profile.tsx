@@ -36,6 +36,14 @@ export const Profile: FC = () => {
     setUpdateUserError(undefined);
     dispatch(updateUser(formValue))
       .unwrap()
+      .then(() => {
+        setFormValue({
+          name: user?.name || '',
+          email: user?.email || '',
+          password: ''
+        });
+        setUpdateUserError(undefined);
+      })
       .catch((err: Error) =>
         setUpdateUserError(err?.message || 'Ошибка сохранения')
       );

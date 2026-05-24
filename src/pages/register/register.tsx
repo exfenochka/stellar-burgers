@@ -5,7 +5,7 @@ import {
   registerUser,
   selectRegisterError
 } from '../../services/slices/userSlice';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export const Register: FC = () => {
   const [userName, setUserName] = useState('');
@@ -13,13 +13,18 @@ export const Register: FC = () => {
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const errorText = useSelector(selectRegisterError);
+
+  const from = location.state?.from?.pathname || '/';
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     dispatch(registerUser({ name: userName, email, password }))
       .unwrap()
-      .then(() => navigate('/'))
+      .then(() => {
+        navigate(from, { replace: true });
+      })
       .catch(() => {});
   };
 
