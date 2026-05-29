@@ -12,7 +12,7 @@ export const ModalOrderInfo: FC = () => {
   };
 
   const formattedNumber = number
-    ? `Детали заказа #${number.padStart(6, '0')}`
+    ? `#${number.padStart(6, '0')}`
     : 'Детали заказа';
 
   return (

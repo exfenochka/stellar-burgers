@@ -1,12 +1,12 @@
 import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
-import React from 'react';
 import { useDispatch, useSelector } from '../../services/store';
 import { selectUser, updateUser } from '../../services/slices/userSlice';
 
 export const Profile: FC = () => {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
+  const [isSaveSuccess, setIsSaveSuccess] = useState(false);
 
   const [formValue, setFormValue] = useState({
     name: user?.name || '',
@@ -24,7 +24,11 @@ export const Profile: FC = () => {
       name: user?.name || '',
       email: user?.email || ''
     }));
-  }, [user]);
+
+    if (isSaveSuccess) {
+      setIsSaveSuccess(false);
+    }
+  }, [user, isSaveSuccess]);
 
   const isFormChanged =
     formValue.name !== user?.name ||
@@ -37,11 +41,7 @@ export const Profile: FC = () => {
     dispatch(updateUser(formValue))
       .unwrap()
       .then(() => {
-        setFormValue({
-          name: user?.name || '',
-          email: user?.email || '',
-          password: ''
-        });
+        setIsSaveSuccess(true);
         setUpdateUserError(undefined);
       })
       .catch((err: Error) =>

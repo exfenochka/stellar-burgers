@@ -4,14 +4,14 @@ import { TOrder } from '../../utils/types';
 
 type TOrderState = {
   orderRequest: boolean;
-  orderModalData: TOrder | null;
-  orderData: TOrder | null;
+  orderModalData: TOrder | null; // Только для модалки после ОФОРМЛЕНИЯ заказа
+  orderInfoData: TOrder | null; // Только для просмотра заказа по НОМЕРУ (кэш)
 };
 
 const initialState: TOrderState = {
   orderRequest: false,
   orderModalData: null,
-  orderData: null
+  orderInfoData: null
 };
 
 export const createOrder = createAsyncThunk(
@@ -34,8 +34,13 @@ const orderSlice = createSlice({
   name: 'order',
   initialState,
   reducers: {
+    // Очистка модалки успешного заказа
     clearOrderModalData: (state) => {
       state.orderModalData = null;
+    },
+    // Очистка кэша просматриваемого заказа
+    clearOrderInfoData: (state) => {
+      state.orderInfoData = null;
     }
   },
   extraReducers: (builder) => {
@@ -45,19 +50,19 @@ const orderSlice = createSlice({
       })
       .addCase(createOrder.fulfilled, (state, action) => {
         state.orderRequest = false;
-        state.orderData = action.payload;
         state.orderModalData = action.payload;
       })
       .addCase(createOrder.rejected, (state) => {
         state.orderRequest = false;
       })
+
       .addCase(getOrderByNumber.fulfilled, (state, action) => {
-        state.orderModalData = action.payload;
+        state.orderInfoData = action.payload;
       });
   }
 });
 
-export const { clearOrderModalData } = orderSlice.actions;
+export const { clearOrderModalData, clearOrderInfoData } = orderSlice.actions;
 export default orderSlice.reducer;
 
 export const selectOrderRequest = (state: { order: TOrderState }) =>
@@ -66,5 +71,5 @@ export const selectOrderRequest = (state: { order: TOrderState }) =>
 export const selectOrderModalData = (state: { order: TOrderState }) =>
   state.order.orderModalData;
 
-export const selectOrderData = (state: { order: TOrderState }) =>
-  state.order.orderData;
+export const selectOrderInfoData = (state: { order: TOrderState }) =>
+  state.order.orderInfoData;

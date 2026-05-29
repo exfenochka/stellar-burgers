@@ -36,7 +36,7 @@ const App = () => {
   };
 
   return (
-    <>
+    <div>
       <AppHeader />
 
       <Routes location={background || location}>
@@ -127,7 +127,7 @@ const App = () => {
           />
         </Routes>
       )}
-    </>
+    </div>
   );
 };
 

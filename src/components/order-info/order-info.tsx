@@ -9,7 +9,8 @@ import { selectFeedOrders } from '../../services/slices/feedSlice';
 import { selectUserOrders } from '../../services/slices/userOrdersSlice';
 import {
   getOrderByNumber,
-  selectOrderModalData
+  selectOrderInfoData,
+  clearOrderInfoData
 } from '../../services/slices/orderSlice';
 
 export const OrderInfo: FC = () => {
@@ -19,7 +20,7 @@ export const OrderInfo: FC = () => {
   const ingredients: TIngredient[] = useSelector(selectIngredients);
   const feedOrders = useSelector(selectFeedOrders);
   const userOrders = useSelector(selectUserOrders);
-  const modalOrder = useSelector(selectOrderModalData);
+  const orderInfoData = useSelector(selectOrderInfoData);
 
   const orderData: TOrder | null = useMemo(() => {
     if (!number) return null;
@@ -27,16 +28,23 @@ export const OrderInfo: FC = () => {
     return (
       feedOrders.find((o) => o.number === num) ||
       userOrders.find((o) => o.number === num) ||
-      (modalOrder?.number === num ? modalOrder : null) ||
+      orderInfoData ||
       null
     );
-  }, [number, feedOrders, userOrders, modalOrder]);
+  }, [number, feedOrders, userOrders, orderInfoData]);
 
   useEffect(() => {
     if (!orderData && number) {
       dispatch(getOrderByNumber(parseInt(number)));
     }
   }, [number, orderData, dispatch]);
+
+  useEffect(
+    () => () => {
+      dispatch(clearOrderInfoData());
+    },
+    [dispatch]
+  );
 
   const orderInfo = useMemo(() => {
     if (!orderData || !ingredients.length) return null;
