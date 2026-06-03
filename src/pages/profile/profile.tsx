@@ -1,18 +1,22 @@
 import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from '../../services/store';
+import { selectUser, updateUser } from '../../services/slices/userSlice';
 
 export const Profile: FC = () => {
-  /** TODO: взять переменную из стора */
-  const user = {
-    name: '',
-    email: ''
-  };
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+  const [isSaveSuccess, setIsSaveSuccess] = useState(false);
 
   const [formValue, setFormValue] = useState({
-    name: user.name,
-    email: user.email,
+    name: user?.name || '',
+    email: user?.email || '',
     password: ''
   });
+
+  const [updateUserError, setUpdateUserError] = useState<string | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     setFormValue((prevState) => ({
@@ -20,7 +24,11 @@ export const Profile: FC = () => {
       name: user?.name || '',
       email: user?.email || ''
     }));
-  }, [user]);
+
+    if (isSaveSuccess) {
+      setIsSaveSuccess(false);
+    }
+  }, [user, isSaveSuccess]);
 
   const isFormChanged =
     formValue.name !== user?.name ||
@@ -29,15 +37,26 @@ export const Profile: FC = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
+    setUpdateUserError(undefined);
+    dispatch(updateUser(formValue))
+      .unwrap()
+      .then(() => {
+        setIsSaveSuccess(true);
+        setUpdateUserError(undefined);
+      })
+      .catch((err: Error) =>
+        setUpdateUserError(err?.message || 'Ошибка сохранения')
+      );
   };
 
   const handleCancel = (e: SyntheticEvent) => {
     e.preventDefault();
     setFormValue({
-      name: user.name,
-      email: user.email,
+      name: user?.name || '',
+      email: user?.email || '',
       password: ''
     });
+    setUpdateUserError(undefined);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,8 +73,7 @@ export const Profile: FC = () => {
       handleCancel={handleCancel}
       handleSubmit={handleSubmit}
       handleInputChange={handleInputChange}
+      updateUserError={updateUserError}
     />
   );
-
-  return null;
 };
