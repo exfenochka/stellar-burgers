@@ -8,7 +8,7 @@ type TOrderState = {
   orderInfoData: TOrder | null; // Только для просмотра заказа по НОМЕРУ (кэш)
 };
 
-const initialState: TOrderState = {
+export const initialState: TOrderState = {
   orderRequest: false,
   orderModalData: null,
   orderInfoData: null
