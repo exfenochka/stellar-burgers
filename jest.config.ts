@@ -17,7 +17,6 @@ const config: Config = {
   collectCoverage: true,
   coverageDirectory: "coverage",
   coverageProvider: "v8",
-  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
   testMatch: ['**/?(*.)+(spec|test).ts?(x)'],
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',

@@ -45,9 +45,9 @@ test.describe('Конструктор бургера', () => {
         await expect(page.getByTestId('constructor-empty-filling')).toBeVisible();
         await expect(page.getByTestId('constructor-empty-bun-bottom')).toBeVisible();
 
-        await page.getByTestId(`add-ingredient-${bunId}`).click();
-        await page.getByTestId(`add-ingredient-${mainId}`).click();
-        await page.getByTestId(`add-ingredient-${sauceId}`).click();
+        await page.getByTestId(`add-ingredient-${bunId}`).locator('button').click();
+        await page.getByTestId(`add-ingredient-${mainId}`).locator('button').click();
+        await page.getByTestId(`add-ingredient-${sauceId}`).locator('button').click();
 
         await expect(page.getByTestId('constructor-bun-top')).toContainText('Краторная булка N-200i (верх)');
         await expect(page.getByTestId('constructor-bun-bottom')).toContainText('Краторная булка N-200i (низ)');
@@ -90,13 +90,13 @@ test.describe('Конструктор бургера', () => {
     test('Cоздание заказа и очистка конструктора', async ({ page }) => {
         await expect(page.getByTestId('modal')).not.toBeVisible();
 
-        await page.getByTestId(`add-ingredient-${bunId}`).click();
+        await page.getByTestId(`add-ingredient-${bunId}`).locator('button').click();
         await page.waitForTimeout(300);
 
-        await page.getByTestId(`add-ingredient-${mainId}`).click();
+        await page.getByTestId(`add-ingredient-${mainId}`).locator('button').click();
         await page.waitForTimeout(300);
 
-        await page.getByTestId(`add-ingredient-${sauceId}`).click();
+        await page.getByTestId(`add-ingredient-${sauceId}`).locator('button').click();
         await page.waitForTimeout(300);
    
         const constructor = page.getByTestId('burger-constructor');

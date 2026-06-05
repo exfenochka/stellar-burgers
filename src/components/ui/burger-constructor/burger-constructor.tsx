@@ -90,14 +90,15 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
         <p className={`text ${styles.text} mr-2`}>{price}</p>
         <CurrencyIcon type='primary' />
       </div>
-      <Button
-        htmlType='button'
-        type='primary'
-        size='large'
-        children='Оформить заказ'
-        onClick={onOrderClick}
-        data-testid='order-button'
-      />
+      <div data-testid='order-button'>
+        <Button
+          htmlType='button'
+          type='primary'
+          size='large'
+          children='Оформить заказ'
+          onClick={onOrderClick}
+        />
+      </div>
     </div>
 
     {orderRequest && (
